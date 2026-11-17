@@ -1,0 +1,41 @@
+{
+  "expo": {
+    "name": "Reporta tu mascota",
+    "slug": "devfest-reporta-mascota",
+    "version": "1.0.0",
+    "platforms": ["ios", "android"],
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "Necesitamos tu galería para que elijas la foto de la mascota.",
+        "NSLocationWhenInUseUsageDescription": "Usamos tu ubicación para indicar dónde viste a la mascota."
+      }
+    },
+    "android": {
+      "permissions": ["ACCESS_COARSE_LOCATION", "ACCESS_FINE_LOCATION"]
+    },
+    "extra": {
+      "router": {
+        "root": "src/app"
+      }
+    },
+    "plugins": [
+      "@ng-native/metro",
+      "expo-secure-store",
+      [
+        "expo-image-picker",
+        { "photosPermission": "Necesitamos tu galería para que elijas la foto de la mascota." }
+      ],
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Usamos tu ubicación para indicar dónde viste a la mascota.",
+          "isAndroidBackgroundLocationEnabled": false,
+          "isIosBackgroundLocationEnabled": false
+        }
+      ]
+    ]
+  }
+}

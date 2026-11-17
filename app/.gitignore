@@ -1,0 +1,8 @@
+node_modules/
+.expo/
+.angular-native/
+ios/
+android/
+dist/
+expo-env.d.ts
+.metro-health-check*

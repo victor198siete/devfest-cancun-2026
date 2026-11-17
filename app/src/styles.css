@@ -1,0 +1,40 @@
+@import 'tailwindcss/theme.css';
+@import 'tailwindcss/utilities.css';
+@import '@ng-native/tailwind/native.css';
+
+/* Paleta del taller. Cada color tiene su par claro / oscuro (-dk): bg-x dark:bg-x-dk. */
+@theme {
+  --color-canvas: #f3f6f4;
+  --color-canvas-dk: #0c1210;
+  --color-surface: #ffffff;
+  --color-surface-dk: #151d19;
+  --color-line: #dbe3de;
+  --color-line-dk: #26332c;
+
+  --color-ink: #14211b;
+  --color-ink-dk: #eef4f1;
+  --color-ink2: #55655d;
+  --color-ink2-dk: #a4b5ab;
+
+  --color-brand: #0f766e;
+  --color-brand-dk: #2dd4bf;
+
+  --color-ok-bg: #d1fae5;
+  --color-ok-fg: #065f46;
+  --color-warn-bg: #fef3c7;
+  --color-warn-fg: #92400e;
+  --color-bad-bg: #fee2e2;
+  --color-bad-fg: #991b1b;
+
+  --text-h1: 30px;
+  --text-h1--line-height: 1.15;
+  --text-title: 17px;
+  --text-title--line-height: 1.3;
+  --text-body: 15px;
+  --text-body--line-height: 1.4;
+  --text-caption: 12px;
+  --text-caption--line-height: 1.3;
+
+  --radius-md: 14px;
+  --radius-lg: 20px;
+}
