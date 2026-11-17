@@ -1,8 +1,8 @@
 import { Component, computed, inject } from '@angular/core';
-import { Router } from '@angular/router';
+
 import { Sharing } from '@ng-native/device';
 import { Pressable, SafeAreaView, ScrollView, Text, View } from '@ng-native/components';
-import { NativeHeader } from '@ng-native/router';
+import { NativeHeader, NativeNavigation } from '@ng-native/router';
 import { Linking } from 'react-native';
 import type { Urgencia } from '../core/modelos.ts';
 import { ReporteState } from '../core/reporte.state.ts';
@@ -68,7 +68,7 @@ const INSIGNIA: Record<Urgencia, { fondo: string; texto: string; etiqueta: strin
 export class ResultadoScreen {
   protected readonly resultado = inject(ReporteState).resultado;
   private readonly sharing = inject(Sharing);
-  private readonly router = inject(Router);
+  private readonly navegacion = inject(NativeNavigation);
 
   protected readonly insignia = computed(() => INSIGNIA[this.resultado()?.urgencia ?? 'baja']);
   protected readonly confianza = computed(() => Math.round((this.resultado()?.confianza ?? 0) * 100));
@@ -85,6 +85,6 @@ export class ResultadoScreen {
 
   protected nuevo() {
     this.resultado.set(null);
-    void this.router.navigateByUrl('/');
+    this.navegacion.back();
   }
 }
