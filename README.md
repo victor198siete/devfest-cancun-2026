@@ -16,6 +16,13 @@ to read the photo and returns a structured report ready to share.
 
 > Work in progress.
 
+## Deploy your own API
+
+[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.svg)](https://shell.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https://github.com/victor198siete/devfest-cancun-2026&cloudshell_tutorial=docs/tutorial.md)
+
+Opens Cloud Shell with a step-by-step tutorial. Two commands (`scripts/setup-gcp.sh` and
+`scripts/deploy.sh`) deploy your own copy of the API to Cloud Run using a public image.
+
 ---
 
 ## En español
