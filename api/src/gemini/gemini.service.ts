@@ -15,7 +15,7 @@ export class GeminiService {
     this.cliente ??= new GoogleGenAI({
       vertexai: true,
       project: this.config.get<string>('GOOGLE_CLOUD_PROJECT'),
-      location: this.config.get<string>('GOOGLE_CLOUD_LOCATION', 'us-central1'),
+      location: this.config.get<string>('GOOGLE_CLOUD_LOCATION', 'global'),
     });
     return this.cliente;
   }
