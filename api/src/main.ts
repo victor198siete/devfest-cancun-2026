@@ -7,6 +7,8 @@ import { AppModule } from './app.module.js';
 async function bootstrap() {
   // Desactivamos el parser por defecto para fijar el límite en 5 MB (la foto va en base64)
   const app = await NestFactory.create<NestExpressApplication>(AppModule, { bodyParser: false });
+  // Detrás del proxy de Cloud Run: la IP del cliente viene en X-Forwarded-For
+  app.set('trust proxy', true);
   app.useBodyParser('json', { limit: '5mb' });
 
   app.useGlobalPipes(
