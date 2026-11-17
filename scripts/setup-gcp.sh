@@ -11,10 +11,11 @@ echo "Proyecto: $P"
 SA="reportes-api@$P.iam.gserviceaccount.com"
 
 if ! out=$(gcloud services enable aiplatform.googleapis.com run.googleapis.com --project "$P" 2>&1); then
-  echo "$out"
   if grep -qi "billing" <<<"$out"; then
     echo "Tu proyecto no tiene facturación. Liga la cuenta de facturación del crédito:"
     echo "https://console.cloud.google.com/billing/linkedaccount?project=$P"
+  else
+    echo "$out"
   fi
   exit 1
 fi

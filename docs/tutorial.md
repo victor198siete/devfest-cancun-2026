@@ -56,6 +56,8 @@ Copia tu URL: es la que pegarás en la app.
 
 Si `/health` no responde, espera 30 segundos y reintenta; si sigue igual, vuelve a correr el despliegue.
 
+Si tu primer reporte dice **«No se pudo obtener respuesta de Gemini»** en los primeros 2 o 3 minutos, es normal: el permiso que dio el script todavía se está propagando. Espera un minuto y vuelve a intentar.
+
 ## Al terminar el taller
 
 Borra el servicio para no gastar tu crédito:
