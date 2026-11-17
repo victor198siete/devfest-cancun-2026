@@ -1,11 +1,12 @@
 import { ApiError, GoogleGenAI } from '@google/genai';
-import { BadGatewayException, Injectable, ServiceUnavailableException } from '@nestjs/common';
+import { BadGatewayException, Injectable, Logger, ServiceUnavailableException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { reporteSchema } from '../reportes/reporte.schema.js';
 
 @Injectable()
 export class GeminiService {
   private cliente?: GoogleGenAI;
+  private readonly logger = new Logger(GeminiService.name);
 
   constructor(private readonly config: ConfigService) {}
 
@@ -30,6 +31,9 @@ export class GeminiService {
       });
       texto = respuesta.text;
     } catch (error) {
+      // Solo el estado y el mensaje de Vertex: nunca la foto ni la ubicación
+      const estado = error instanceof ApiError ? error.status : 'sin estado';
+      this.logger.error(`Gemini falló (${estado}): ${error instanceof Error ? error.message : error}`);
       if (error instanceof ApiError && error.status === 429) {
         throw new ServiceUnavailableException('Gemini está ocupado, intenta de nuevo en unos segundos');
       }
