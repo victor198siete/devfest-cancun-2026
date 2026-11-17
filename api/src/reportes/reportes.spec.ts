@@ -1,10 +1,11 @@
 import { BadGatewayException, INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import { jest } from '@jest/globals';
+import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import request from 'supertest';
 import { HealthController } from '../health.controller.js';
 import { GeminiService } from '../gemini/gemini.service.js';
 import { ConfigModule } from '@nestjs/config';
+import { ThrottlerModule } from '@nestjs/throttler';
 import { ReportesController } from './reportes.controller.js';
 import { ReportesService } from './reportes.service.js';
 
@@ -27,11 +28,11 @@ const peticion = {
 
 describe('API de reportes (Gemini simulado)', () => {
   let app: INestApplication;
-  const gemini = { analizarImagen: jest.fn<GeminiService['analizarImagen']>() };
+  const gemini = { analizarImagen: vi.fn<GeminiService['analizarImagen']>() };
 
   beforeAll(async () => {
     const modulo = await Test.createTestingModule({
-      imports: [ConfigModule.forRoot({ isGlobal: true })],
+      imports: [ConfigModule.forRoot({ isGlobal: true }), ThrottlerModule.forRoot({ throttlers: [{ ttl: 60_000, limit: 1000 }] })],
       controllers: [ReportesController, HealthController],
       providers: [ReportesService, { provide: GeminiService, useValue: gemini }],
     }).compile();
@@ -41,7 +42,9 @@ describe('API de reportes (Gemini simulado)', () => {
   });
 
   afterAll(() => app.close());
-  beforeEach(() => gemini.analizarImagen.mockReset());
+  beforeEach(() => {
+    gemini.analizarImagen.mockReset();
+  });
 
   it.each([
     ['sin foto', { ...peticion, fotoBase64: undefined }],
