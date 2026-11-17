@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+.expo/
+web-build/
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Credentials
+*.pem
+*.key
+*-key.json
+service-account*.json
+
+# Logs and OS files
+npm-debug.log*
+*.log
+.DS_Store
+coverage/
