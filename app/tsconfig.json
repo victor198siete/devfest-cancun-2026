@@ -8,5 +8,9 @@
     "strictTemplates": true,
     "typeCheckHostBindings": false,
     "strictDomEventTypes": false
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }
