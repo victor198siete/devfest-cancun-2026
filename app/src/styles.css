@@ -19,6 +19,14 @@
   --color-brand: #0f766e;
   --color-brand-dk: #2dd4bf;
 
+  /* Tinte de brand: chips de señas, zona de foto y pista de las barras. */
+  --color-tint: #e6f2ef;
+  --color-tint-dk: #10302b;
+  --color-tint2: #cfe6df;
+  --color-tint2-dk: #1b4a43;
+  --color-brand-ink: #0b5a54;
+  --color-brand-ink-dk: #99f0e2;
+
   --color-ok-bg: #d1fae5;
   --color-ok-fg: #065f46;
   --color-warn-bg: #fef3c7;

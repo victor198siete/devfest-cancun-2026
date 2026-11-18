@@ -12,6 +12,8 @@ export interface Ubicacion {
   longitud: number;
   /** true cuando no se pudo leer el GPS y se usa la Universidad del Caribe. */
   aproximada: boolean;
+  /** Nombre del lugar (p. ej. «Cancún, Q. Roo»); vacío si no se pudo resolver. */
+  lugar?: string;
 }
 
 export interface NuevoReporte {
