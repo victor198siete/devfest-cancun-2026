@@ -8,8 +8,9 @@ export interface LectorMovimiento {
 
 export const LECTOR_MOVIMIENTO = new InjectionToken<() => Promise<LectorMovimiento>>('LECTOR_MOVIMIENTO', {
   providedIn: 'root',
-  // Import diferido: react-native no se puede cargar bajo Node (tests).
-  factory: () => async () => (await import('react-native')).AccessibilityInfo as unknown as LectorMovimiento,
+  // Sin lector, nada se reduce. main.ts provee el real (AccessibilityInfo): aquí no se importa
+  // react-native porque no carga bajo Node (tests) y un import diferido rompe en Expo Go.
+  factory: () => async () => ({ isReduceMotionEnabled: async () => false, addEventListener: () => ({ remove() {} }) }),
 });
 
 /** Preferencia «Reducir movimiento» del teléfono: si es true, nada se anima. */

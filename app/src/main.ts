@@ -2,7 +2,7 @@
 import '@angular/localize/init';
 // Runtime de Expo: su fetch y URL. Debe cargarse antes que Angular.
 import 'expo';
-import { AppRegistry, Image, Platform, processColor } from 'react-native';
+import { AccessibilityInfo, AppRegistry, Image, Platform, processColor } from 'react-native';
 import { withComponentInputBinding } from '@angular/router';
 import { currentConditions, deviceTokens, watchConditions } from '@ng-native/device';
 import { getFabricUIManager, registerPlatformComponents } from '@ng-native/fabric';
@@ -10,6 +10,7 @@ import { mount } from '@ng-native/platform';
 import { provideNativeRouter, withHeaderDefaults } from '@ng-native/router';
 import tailwind from '../.angular-native/app.tailwind.js';
 import { routes } from './app/app.routes.ts';
+import { LECTOR_MOVIMIENTO, type LectorMovimiento } from './app/ui/movimiento.ts';
 import { App } from './app/app.ts';
 
 registerPlatformComponents(Platform.OS);
@@ -20,6 +21,7 @@ AppRegistry.registerRunnable('main', ({ rootTag }) => {
     // Clases de Tailwind, compiladas por withTailwind en metro.config.js.
     globalStyles: tailwind,
     providers: [
+      { provide: LECTOR_MOVIMIENTO, useValue: async () => AccessibilityInfo as unknown as LectorMovimiento },
       provideNativeRouter(
         routes,
         withComponentInputBinding(),
