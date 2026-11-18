@@ -1,0 +1,6 @@
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args: ['build', '-f', 'servidor-app/Dockerfile', '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/taller/reportes-app:v1', '.']
+images: ['us-central1-docker.pkg.dev/$PROJECT_ID/taller/reportes-app:v1']
+options:
+  machineType: E2_HIGHCPU_8
