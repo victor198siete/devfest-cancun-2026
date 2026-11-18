@@ -1,11 +1,13 @@
 import { Component, computed, inject } from '@angular/core';
 
+import { AnimatedStyle } from '@ng-native/components/animations';
 import { Sharing } from '@ng-native/device';
 import { Image, Pressable, SafeAreaView, ScrollView, Text, View } from '@ng-native/components';
 import { NativeHeader, NativeNavigation } from '@ng-native/router';
 import { Linking } from 'react-native';
 import type { Urgencia } from '../core/modelos.ts';
 import { ReporteState } from '../core/reporte.state.ts';
+import { crearAparicion, crearRelleno } from '../ui/animar.ts';
 import { Chip, type VarianteChip } from '../ui/chip.ts';
 import { Icono, type TonoIcono } from '../ui/icono.ts';
 import { TarjetaSeccion } from '../ui/tarjeta-seccion.ts';
@@ -18,7 +20,7 @@ const INSIGNIA: Record<Urgencia, { variante: VarianteChip; tono: TonoIcono; icon
 
 @Component({
   selector: 'app-resultado-screen',
-  imports: [Chip, Icono, Image, NativeHeader, Pressable, SafeAreaView, ScrollView, TarjetaSeccion, Text, View],
+  imports: [AnimatedStyle, Chip, Icono, Image, NativeHeader, Pressable, SafeAreaView, ScrollView, TarjetaSeccion, Text, View],
   host: { style: 'flex: 1' },
   template: `
     <native-header title="Resultado" />
@@ -28,10 +30,11 @@ const INSIGNIA: Record<Urgencia, { variante: VarianteChip; tono: TonoIcono; icon
           @if (uri(); as u) {
             <view class="overflow-hidden rounded-lg">
               <image [source]="{ uri: u }" resizeMode="cover" accessibilityLabel="Foto del reporte" style="height: 130; width: 100%; borderRadius: 16" />
-              <!-- Píldora de destellos: la que luego brillará. -->
-              <view class="pildora-gemini absolute left-3 top-3">
+              <view class="pildora-gemini absolute left-3 top-3" [animatedStyle]="aparicion.pildora">
                 <app-chip [etiqueta]="'Analizado por Gemini · ' + segundos() + ' s'" variante="blanco">
-                  <app-icono nombre="lucideSparkles" [tamano]="12" tono="brand" />
+                  <view [animatedStyle]="aparicion.icono">
+                    <app-icono nombre="lucideSparkles" [tamano]="12" tono="brand" />
+                  </view>
                 </app-chip>
               </view>
             </view>
@@ -42,7 +45,7 @@ const INSIGNIA: Record<Urgencia, { variante: VarianteChip; tono: TonoIcono; icon
               <view class="flex-row items-start justify-between gap-3">
                 <view class="flex-1 gap-1">
                   <text class="text-caption font-bold text-ink2 dark:text-ink2-dk">ESPECIE</text>
-                  <text class="text-h1 font-black text-ink dark:text-ink-dk">{{ r.especie }}</text>
+                  <text class="text-h1 font-black text-ink dark:text-ink-dk">{{ especie() }}</text>
                 </view>
                 <app-chip [etiqueta]="insignia().etiqueta" [variante]="insignia().variante">
                   <app-icono [nombre]="insignia().icono" [tamano]="12" [tono]="insignia().tono" [trazo]="3" />
@@ -53,9 +56,9 @@ const INSIGNIA: Record<Urgencia, { variante: VarianteChip; tono: TonoIcono; icon
                   <text class="text-body text-ink2 dark:text-ink2-dk">Confianza</text>
                   <text class="text-body font-bold text-ink dark:text-ink-dk">{{ confianza() }}%</text>
                 </view>
-                <!-- Barra de confianza: el relleno es una view con ancho porcentual. -->
+                <!-- Barra de confianza: el relleno crece de 0 al valor. -->
                 <view class="h-2 overflow-hidden rounded-full bg-tint dark:bg-tint-dk" accessibilityRole="progressbar" [accessibilityLabel]="'Confianza ' + confianza() + ' por ciento'">
-                  <view class="barra-confianza h-2 rounded-full bg-brand dark:bg-brand-dk" [style]="{ width: confianza() + '%' }"></view>
+                  <view class="barra-confianza h-2 rounded-full bg-brand dark:bg-brand-dk" [animatedStyle]="relleno"></view>
                 </view>
               </view>
             </app-tarjeta-seccion>
@@ -117,6 +120,14 @@ export class ResultadoScreen {
 
   protected readonly insignia = computed(() => INSIGNIA[this.resultado()?.urgencia ?? 'baja']);
   protected readonly confianza = computed(() => Math.round((this.resultado()?.confianza ?? 0) * 100));
+
+  protected readonly especie = computed(() => {
+    const e = this.resultado()?.especie ?? '';
+    return e.charAt(0).toUpperCase() + e.slice(1);
+  });
+
+  protected readonly aparicion = crearAparicion(this.resultado);
+  protected readonly relleno = crearRelleno(this.confianza);
 
   protected compartir() {
     const r = this.resultado();

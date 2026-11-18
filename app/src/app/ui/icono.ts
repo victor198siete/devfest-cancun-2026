@@ -1,7 +1,7 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { provideIcons } from '@ng-icons/core';
 import {
-  lucideBandage, lucideCheck, lucideChevronDown, lucideChevronUp, lucideCircleAlert, lucideImagePlus,
+  lucideHeartPulse, lucideCheck, lucideChevronDown, lucideChevronUp, lucideCircleAlert, lucideImagePlus,
   lucideMap, lucideMapPin, lucideMegaphone, lucidePawPrint, lucideRefreshCw, lucideSearch, lucideSend,
   lucideSettings, lucideShare2, lucideSparkles, lucideTriangleAlert, lucideCircleHelp,
 } from '@ng-icons/lucide';
@@ -27,7 +27,7 @@ const COLORES: Record<TonoIcono, [string, string]> = {
   imports: [NgIcon],
   providers: [
     provideIcons({
-      lucideBandage, lucideCheck, lucideChevronDown, lucideChevronUp, lucideCircleAlert, lucideImagePlus,
+      lucideHeartPulse, lucideCheck, lucideChevronDown, lucideChevronUp, lucideCircleAlert, lucideImagePlus,
       lucideMap, lucideMapPin, lucideMegaphone, lucidePawPrint, lucideRefreshCw, lucideSearch, lucideSend,
       lucideSettings, lucideShare2, lucideSparkles, lucideTriangleAlert, lucideCircleHelp,
     }),

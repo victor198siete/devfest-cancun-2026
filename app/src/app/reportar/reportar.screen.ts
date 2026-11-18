@@ -1,19 +1,21 @@
 import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { Image, Pressable, SafeAreaView, ScrollView, Text, TextInput, View } from '@ng-native/components';
+import { AnimatedStyle } from '@ng-native/components/animations';
 import { NativeHeader } from '@ng-native/router';
 import { FotoService } from '../core/foto.service.ts';
 import type { Foto, TipoReporte, Ubicacion } from '../core/modelos.ts';
 import { ReporteState } from '../core/reporte.state.ts';
 import { ApiUrl, ReporteError, ReportesApi } from '../core/reportes-api.ts';
 import { UbicacionService } from '../core/ubicacion.service.ts';
+import { crearLatido, crearPop, crearSegmentos, crearTransicion } from '../ui/animar.ts';
 import { Chip } from '../ui/chip.ts';
 import { Icono } from '../ui/icono.ts';
 import { TarjetaSeccion } from '../ui/tarjeta-seccion.ts';
 
 const TIPOS: { valor: TipoReporte; etiqueta: string; icono: string }[] = [
   { valor: 'perdida', etiqueta: 'Perdida', icono: 'lucideSearch' },
-  { valor: 'herida', etiqueta: 'Herida', icono: 'lucideBandage' },
+  { valor: 'herida', etiqueta: 'Herida', icono: 'lucideHeartPulse' },
   { valor: 'campana', etiqueta: 'Campaña', icono: 'lucideMegaphone' },
 ];
 const AVISO_LENTO_MS = 10_000;
@@ -21,7 +23,7 @@ const TOTAL_PASOS = 3;
 
 @Component({
   selector: 'app-reportar-screen',
-  imports: [Chip, Icono, Image, NativeHeader, Pressable, SafeAreaView, ScrollView, TarjetaSeccion, Text, TextInput, View],
+  imports: [AnimatedStyle, Chip, Icono, Image, NativeHeader, Pressable, SafeAreaView, ScrollView, TarjetaSeccion, Text, TextInput, View],
   host: { style: 'flex: 1' },
   template: `
     <native-header title="Reportar mascota" />
@@ -32,8 +34,8 @@ const TOTAL_PASOS = 3;
             @if (foto(); as f) {
               <image [source]="{ uri: f.uri }" resizeMode="cover" accessibilityLabel="Foto que se está analizando" style="height: 120; width: 120; borderRadius: 16" />
             }
-            <!-- Huella de espera: la que latirá en la parte de animaciones. -->
-            <view class="huella-espera" [accessibilityElementsHidden]="true">
+            <!-- Huella de espera: late mientras carga. -->
+            <view class="huella-espera" [animatedStyle]="latido" [accessibilityElementsHidden]="true">
               <app-icono nombre="lucidePawPrint" [tamano]="48" tono="brand" />
             </view>
             <text class="text-center text-title font-bold text-ink dark:text-ink-dk">Gemini está analizando la foto…</text>
@@ -55,7 +57,7 @@ const TOTAL_PASOS = 3;
 
           <view class="flex-row items-center justify-between">
             <!-- Chip de conexión: envuelto para animarlo sin tocar el chip. -->
-            <view class="chip-conexion">
+            <view class="chip-conexion" [animatedStyle]="transicionChip">
               @if (api.esRespaldo()) {
                 <app-chip etiqueta="Usando el respaldo" variante="neutro" />
               } @else {
@@ -70,7 +72,9 @@ const TOTAL_PASOS = 3;
           <view class="flex-row gap-2" accessibilityRole="progressbar" [accessibilityLabel]="listos() + ' de 3 pasos listos'">
             @for (paso of pasos(); track $index) {
               <!-- Segmento de progreso: uno por paso. -->
-              <view class="segmento h-1.5 flex-1 rounded-full" [class]="paso ? 'bg-brand dark:bg-brand-dk' : 'bg-line dark:bg-line-dk'"></view>
+              <view class="segmento h-1.5 flex-1 overflow-hidden rounded-full bg-line dark:bg-line-dk">
+                <view class="h-1.5 rounded-full bg-brand dark:bg-brand-dk" [animatedStyle]="segmentos[$index]"></view>
+              </view>
             }
           </view>
 
@@ -154,7 +158,7 @@ const TOTAL_PASOS = 3;
             </view>
             @if (ubicacion()) {
               <!-- Palomita de ubicación lista. -->
-              <view class="palomita-ubicacion" [accessibilityElementsHidden]="true">
+              <view class="palomita-ubicacion" [animatedStyle]="pop" [accessibilityElementsHidden]="true">
                 <app-icono nombre="lucideCheck" [tamano]="22" tono="ok" [trazo]="3" />
               </view>
             }
@@ -259,6 +263,12 @@ export class ReportarScreen {
   });
   /** Host de la API sin protocolo ni ruta, para la fila plegada. */
   protected readonly hostApi = computed(() => this.api.url().replace(/^https?:\/\//, '').split('/')[0] ?? '');
+
+  // Animaciones (se apagan con «Reducir movimiento»).
+  protected readonly latido = crearLatido(this.cargando);
+  protected readonly segmentos = crearSegmentos(this.pasos);
+  protected readonly pop = crearPop(() => this.ubicacion() !== null);
+  protected readonly transicionChip = crearTransicion(this.api.esRespaldo);
 
   private temporizador: ReturnType<typeof setTimeout> | undefined;
   private reloj: ReturnType<typeof setInterval> | undefined;
