@@ -24,6 +24,16 @@ gcloud run deploy reportes-api --project "$P" --region us-central1 \
   --quiet
 
 URL=$(gcloud run services describe reportes-api --project "$P" --region us-central1 --format='value(status.url)')
+
+# QR para llevar la URL al teléfono sin teclearla
+echo
+QR=/tmp/qr-taller
+if npm install --prefix "$QR" qrcode-terminal@0.12.0 --silent --no-audit --no-fund >/dev/null 2>&1; then
+  echo "Escanea este QR con tu teléfono y copia el enlace:"
+  node -e "require('$QR/node_modules/qrcode-terminal').generate(process.argv[1], { small: true })" "$URL" || true
+else
+  echo "(No se pudo dibujar el QR: copia la URL de abajo)"
+fi
 echo
 echo "=============================================="
 echo "  TU API:   $URL"
