@@ -15,7 +15,7 @@ const expoConfig = JSON.parse(await readFile(join(DIST, 'expoConfig.json'), 'utf
 delete expoConfig.owner;
 delete expoConfig.updates;
 if (expoConfig.extra) delete expoConfig.extra.eas;
-const idActualizacion = uuidDesde(JSON.stringify(metadata));
+const idActualizacion = uuidDesde(JSON.stringify(metadata) + JSON.stringify(expoConfig));
 const creadoEn = new Date().toISOString();
 const tipos = { '.js': 'application/javascript', '.png': 'image/png', '.jpg': 'image/jpeg', '.ttf': 'font/ttf' };
 
