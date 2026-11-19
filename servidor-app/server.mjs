@@ -10,6 +10,11 @@ const PORT = Number(process.env.PORT ?? 8080);
 
 const metadata = JSON.parse(await readFile(join(DIST, 'metadata.json'), 'utf8'));
 const expoConfig = JSON.parse(await readFile(join(DIST, 'expoConfig.json'), 'utf8'));
+// Sin rastro del proyecto de EAS: Expo Go en Android intenta consultarlo y se queda en
+// «Checking for new update…» para quien no es miembro de la organización.
+delete expoConfig.owner;
+delete expoConfig.updates;
+if (expoConfig.extra) delete expoConfig.extra.eas;
 const idActualizacion = uuidDesde(JSON.stringify(metadata));
 const creadoEn = new Date().toISOString();
 const tipos = { '.js': 'application/javascript', '.png': 'image/png', '.jpg': 'image/jpeg', '.ttf': 'font/ttf' };
