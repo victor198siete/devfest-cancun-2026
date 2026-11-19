@@ -13,7 +13,7 @@ if [ -z "$P" ]; then
   echo "No hay proyecto elegido. Ejecuta: gcloud config set project TU_ID"
   exit 1
 fi
-IMAGEN=us-central1-docker.pkg.dev/devfest-cancun-2026/taller/reportes-api:v1
+IMAGEN=us-central1-docker.pkg.dev/devfest-cancun-2026/taller/reportes-api:v2
 
 echo "Desplegando en $P (idioma: $IDIOMA)..."
 gcloud run deploy reportes-api --project "$P" --region us-central1 \
