@@ -8,6 +8,17 @@ if [ -z "$P" ]; then
   exit 1
 fi
 echo "Proyecto: $P"
+
+# El error más común: el ID no existe o el proyecto es de otra cuenta de Google
+if ! gcloud projects describe "$P" >/dev/null 2>&1; then
+  CUENTA=$(gcloud config get-value account 2>/dev/null || true)
+  echo "No encuentro el proyecto '$P' con la cuenta $CUENTA."
+  echo "Tus proyectos (usa el valor de la columna PROJECT_ID):"
+  gcloud projects list --format="table(projectId,name)" 2>/dev/null || true
+  echo "Luego: gcloud config set project TU_ID   y vuelve a correr este script."
+  echo "Si la lista está vacía, crea el proyecto en el paso «Elige tu proyecto» del tutorial."
+  exit 1
+fi
 SA="reportes-api@$P.iam.gserviceaccount.com"
 
 if ! out=$(gcloud services enable aiplatform.googleapis.com run.googleapis.com --project "$P" 2>&1); then

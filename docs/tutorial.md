@@ -14,6 +14,8 @@ Si ves la pantalla en inglés o algo no carga, no te preocupes: cada paso trae u
 
 Elige o crea un proyecto **con la cuenta de facturación del crédito ligada**. Tu proyecto: `{{project-id}}`
 
+Si no sabes el ID de tu proyecto, ve tu lista con `gcloud projects list` (columna `PROJECT_ID`).
+
 ```bash
 gcloud config set project {{project-id}}
 ```
@@ -52,7 +54,7 @@ Abre `/docs` en tu URL y prueba `GET /health`: debe responder `{"status":"ok"}`.
 curl "$(gcloud run services describe reportes-api --region us-central1 --format='value(status.url)')/health"
 ```
 
-Copia tu URL: es la que pegarás en la app.
+Escanea con tu teléfono el QR que apareció en la terminal: verás **«Tu API está lista»**. Toca **«Copiar dirección»** y pégala en la app, en **Mi API**.
 
 Si `/health` no responde, espera 30 segundos y reintenta; si sigue igual, vuelve a correr el despliegue.
 
